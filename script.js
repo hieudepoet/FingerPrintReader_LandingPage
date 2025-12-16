@@ -272,19 +272,40 @@ function init() {
   document.getElementById("websiteLink").href = CONFIG.websiteUrl;
   document.getElementById("fanpageLink").href = CONFIG.fanpageUrl;
 
-  if (CONFIG.enableSound) {
-    bgMusic.volume = 0.3;
-    bgMusic.play().catch(() => {});
+  // Enable audio on first user interaction
+  function enableAudio() {
+    if (CONFIG.enableSound) {
+      bgMusic.volume = 0.3;
+      bgMusic.play().catch((err) => {
+        console.log(
+          "Background music blocked, waiting for user interaction:",
+          err
+        );
+      });
+    }
   }
 
-  window.addEventListener("resize", () => {
+  // Try to play immediately
+  enableAudio();
+
+  // Also try on first click/touch
+  document.body.addEventListener("click", enableAudio, { once: true });
+  document.body.addEventListener("touchstart", enableAudio, { once: true });
+
+  // Function to update button positions
+  function updateButtonPositions() {
     touchButtons.forEach((button) => {
       const id = button.getAttribute("data-id");
       const rect = button.getBoundingClientRect();
       energySystem.buttonTargets[id].x = rect.left + rect.width / 2;
       energySystem.buttonTargets[id].y = rect.top + rect.height / 2;
     });
-  });
+  }
+
+  window.addEventListener("resize", updateButtonPositions);
+
+  // Update positions after a short delay to ensure CSS is applied
+  setTimeout(updateButtonPositions, 100);
 }
 
 // ==================== BUTTON ACTIVATION ====================
@@ -317,9 +338,11 @@ function handleButtonActivation(e) {
   }
 
   if (CONFIG.enableSound) {
-    const sound = activateSound.cloneNode();
-    sound.volume = 0.6;
-    sound.play().catch(() => {});
+    activateSound.currentTime = 0;
+    activateSound.volume = 1.0;
+    activateSound
+      .play()
+      .catch((err) => console.log("Activate sound error:", err));
   }
 
   if (activatedButtons.size === 6) {
@@ -415,10 +438,13 @@ function runCountdown() {
     if (count > 0) {
       countdownNumber.textContent = count;
       animateCountdownNumber();
-      if (CONFIG.enableSound) {
-        const tick = countdownTickSound.cloneNode();
-        tick.volume = 0.8;
-        tick.play().catch(() => {});
+      // Only play tick sound for 3, 2, 1
+      if (CONFIG.enableSound && count <= 3) {
+        countdownTickSound.currentTime = 0;
+        countdownTickSound.volume = 1.0;
+        countdownTickSound
+          .play()
+          .catch((err) => console.log("Countdown tick error:", err));
       }
     } else {
       clearInterval(countdownInterval);
@@ -445,6 +471,22 @@ function animateCountdownNumber() {
 
 // ==================== TRANSITION TO FINAL ====================
 function triggerExplosion() {
+  // Play explosion sound
+  if (CONFIG.enableSound) {
+    explosionSound.volume = 1.0;
+    explosionSound
+      .play()
+      .catch((err) => console.log("Explosion sound error:", err));
+  }
+
+  // Stop countdown tick sound after 1.5 seconds
+  setTimeout(() => {
+    if (CONFIG.enableSound) {
+      countdownTickSound.pause();
+      countdownTickSound.currentTime = 0;
+    }
+  }, 1500);
+
   // Fade out buttons quickly
   const countdownButtons = countdownScreen.querySelectorAll(".touch-btn");
   countdownButtons.forEach((btn) => {
@@ -491,6 +533,13 @@ function showFinalScreen() {
     { opacity: 1, duration: 1, ease: "power2.out" }
   );
   initParticles("particles-final");
+
+  // Restart background music on final screen
+  if (CONFIG.enableSound) {
+    bgMusic.currentTime = 0;
+    bgMusic.volume = 0.3;
+    bgMusic.play().catch(() => {});
+  }
 }
 
 // ==================== RESET ====================
