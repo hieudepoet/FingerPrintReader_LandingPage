@@ -1,7 +1,7 @@
 // Configuration
 const CONFIG = {
-  websiteUrl: "https://thangtuong.danang.gov.vn",
-  fanpageUrl: "https://www.facebook.com/profile.php?id=61571173803476",
+  websiteUrl: "https://thangtruong.danang.gov.vn",
+  fanpageUrl: "https://www.facebook.com/xathangtruong",
   countdownDuration: 5,
   enableSound: true,
 };
