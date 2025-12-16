@@ -28,31 +28,37 @@ const explosionSound = document.getElementById("explosionSound");
 
 // ==================== PARTICLES ====================
 function initParticles(containerId = "particles-js") {
-  if (typeof particlesJS !== "undefined") {
-    particlesJS(containerId, {
-      particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
-        color: { value: ["#FFD700", "#DC143C"] },
-        shape: { type: "circle" },
-        opacity: { value: 0.5, random: true },
-        size: { value: 3, random: true },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#FFD700",
-          opacity: 0.3,
-          width: 1.5,
+  try {
+    if (typeof particlesJS !== "undefined") {
+      particlesJS(containerId, {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: ["#FFD700", "#DC143C"] },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: true },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#FFD700",
+            opacity: 0.3,
+            width: 1.5,
+          },
+          move: {
+            enable: true,
+            speed: 1.5,
+            direction: "none",
+            random: true,
+            out_mode: "out",
+          },
         },
-        move: {
-          enable: true,
-          speed: 1.5,
-          direction: "none",
-          random: true,
-          out_mode: "out",
-        },
-      },
-      retina_detect: true,
-    });
+        retina_detect: true,
+      });
+    } else {
+      console.warn("ParticlesJS library not loaded");
+    }
+  } catch (error) {
+    console.error("Error initializing particles:", error);
   }
 }
 
@@ -121,6 +127,8 @@ class EnergySystem {
       size: Math.random() * 2 + 1,
       opacity: Math.random() * 0.5 + 0.3,
       isLogoParticle: true,
+      life: 0,
+      maxLife: 150,
     });
   }
 
@@ -138,11 +146,20 @@ class EnergySystem {
       speed: Math.random() * 0.006 + 0.003,
       size: Math.random() * 3 + 1.5,
       opacity: Math.random() * 0.5 + 0.3,
+      life: 0,
+      maxLife: 200,
     });
   }
 
   drawButtonParticles() {
-    this.buttonParticles.forEach((p, index) => {
+    const particlesToKeep = [];
+
+    for (let i = 0; i < this.buttonParticles.length; i++) {
+      const p = this.buttonParticles[i];
+      if (!p) continue;
+
+      p.life++;
+
       // Handle logo particles differently
       if (p.isLogoParticle) {
         const dx = p.targetX - p.x;
@@ -169,17 +186,16 @@ class EnergySystem {
         this.ctx.fill();
 
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 20) {
-          this.buttonParticles[index] = null;
+        if (dist >= 20 && p.life < p.maxLife) {
+          particlesToKeep.push(p);
         }
-        return;
+        continue;
       }
 
       // Regular button particles
       const target = this.buttonTargets[p.buttonId];
       if (!target || !target.active) {
-        this.buttonParticles[index] = null;
-        return;
+        continue;
       }
 
       const dx = p.targetX - p.x;
@@ -211,10 +227,15 @@ class EnergySystem {
         const distance = Math.random() * 150 + 80;
         p.x = target.x + Math.cos(angle) * distance;
         p.y = target.y + Math.sin(angle) * distance;
+        p.life = 0;
       }
-    });
 
-    this.buttonParticles = this.buttonParticles.filter((p) => p !== null);
+      if (p.life < p.maxLife) {
+        particlesToKeep.push(p);
+      }
+    }
+
+    this.buttonParticles = particlesToKeep;
   }
 
   animate() {
@@ -250,76 +271,107 @@ class EnergySystem {
 
 // ==================== INITIALIZATION ====================
 function init() {
-  initParticles();
+  try {
+    initParticles();
 
-  const energyCanvas = document.getElementById("energySystemCanvas");
-  energySystem = new EnergySystem(energyCanvas);
-
-  touchButtons.forEach((button) => {
-    const id = button.getAttribute("data-id");
-    const rect = button.getBoundingClientRect();
-    energySystem.addButtonTarget(
-      id,
-      rect.left + rect.width / 2,
-      rect.top + rect.height / 2
-    );
-    button.addEventListener("touchstart", handleButtonActivation);
-    button.addEventListener("click", handleButtonActivation);
-  });
-
-  energySystem.start();
-
-  document.getElementById("websiteLink").href = CONFIG.websiteUrl;
-  document.getElementById("fanpageLink").href = CONFIG.fanpageUrl;
-
-  // Enable audio on first user interaction
-  function enableAudio() {
-    if (CONFIG.enableSound) {
-      bgMusic.volume = 0.3;
-      bgMusic.play().catch((err) => {
-        console.log(
-          "Background music blocked, waiting for user interaction:",
-          err
-        );
-      });
+    const energyCanvas = document.getElementById("energySystemCanvas");
+    if (!energyCanvas) {
+      console.error("Energy canvas not found");
+      return;
     }
-  }
 
-  // Try to play immediately
-  enableAudio();
+    energySystem = new EnergySystem(energyCanvas);
 
-  // Also try on first click/touch
-  document.body.addEventListener("click", enableAudio, { once: true });
-  document.body.addEventListener("touchstart", enableAudio, { once: true });
-
-  // Function to update button positions
-  function updateButtonPositions() {
     touchButtons.forEach((button) => {
       const id = button.getAttribute("data-id");
       const rect = button.getBoundingClientRect();
-      energySystem.buttonTargets[id].x = rect.left + rect.width / 2;
-      energySystem.buttonTargets[id].y = rect.top + rect.height / 2;
+      energySystem.addButtonTarget(
+        id,
+        rect.left + rect.width / 2,
+        rect.top + rect.height / 2
+      );
+      button.addEventListener("touchstart", handleButtonActivation);
+      button.addEventListener("click", handleButtonActivation);
     });
+
+    energySystem.start();
+
+    const websiteLink = document.getElementById("websiteLink");
+    const fanpageLink = document.getElementById("fanpageLink");
+    if (websiteLink) websiteLink.href = CONFIG.websiteUrl;
+    if (fanpageLink) fanpageLink.href = CONFIG.fanpageUrl;
+
+    // Enable audio on first user interaction
+    function enableAudio() {
+      if (CONFIG.enableSound && bgMusic) {
+        try {
+          bgMusic.volume = 0.3;
+          bgMusic.play().catch((err) => {
+            console.log(
+              "Background music blocked, waiting for user interaction:",
+              err
+            );
+          });
+        } catch (error) {
+          console.error("Error playing background music:", error);
+        }
+      }
+    }
+
+    // Try to play immediately
+    enableAudio();
+
+    // Also try on first click/touch
+    document.body.addEventListener("click", enableAudio, { once: true });
+    document.body.addEventListener("touchstart", enableAudio, { once: true });
+
+    // Function to update button positions
+    function updateButtonPositions() {
+      touchButtons.forEach((button) => {
+        const id = button.getAttribute("data-id");
+        const rect = button.getBoundingClientRect();
+        if (energySystem.buttonTargets[id]) {
+          energySystem.buttonTargets[id].x = rect.left + rect.width / 2;
+          energySystem.buttonTargets[id].y = rect.top + rect.height / 2;
+        }
+      });
+    }
+
+    // Debounced resize handler for better performance
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        updateButtonPositions();
+        energySystem.resize();
+      }, 150);
+    });
+
+    // Update positions after a short delay to ensure CSS is applied
+    setTimeout(updateButtonPositions, 100);
+  } catch (error) {
+    console.error("Error during initialization:", error);
   }
-
-  window.addEventListener("resize", updateButtonPositions);
-
-  // Update positions after a short delay to ensure CSS is applied
-  setTimeout(updateButtonPositions, 100);
 }
 
 // ==================== BUTTON ACTIVATION ====================
 function handleButtonActivation(e) {
   e.preventDefault();
+  console.log("Button clicked, isCountdownActive:", isCountdownActive);
+
   if (isCountdownActive) return;
 
   const button = e.currentTarget;
   const id = button.getAttribute("data-id");
+  console.log("Button ID:", id, "Already activated:", activatedButtons.has(id));
+
   if (activatedButtons.has(id)) return;
 
   button.classList.add("activated");
   activatedButtons.add(id);
   energySystem.activateButton(id);
+
+  console.log("Activated buttons count:", activatedButtons.size);
 
   // Increase logo-ring-3 border width
   const logoRing3 = document.querySelector(".logo-ring-3");
@@ -346,12 +398,33 @@ function handleButtonActivation(e) {
   }
 
   if (activatedButtons.size === 6) {
-    setTimeout(triggerLogoFlash, 500);
+    console.log("All 6 buttons activated! Triggering countdown in 500ms...");
+    setTimeout(() => {
+      console.log("Calling triggerLogoFlash now");
+      triggerLogoFlash();
+    }, 500);
   }
 }
 
 function triggerLogoFlash() {
+  console.log("triggerLogoFlash called");
+
   const logo = document.getElementById("logoMocha35");
+  console.log("Logo element:", logo);
+
+  if (!logo) {
+    console.error("Logo not found, starting countdown anyway");
+    startCountdown();
+    return;
+  }
+
+  if (typeof gsap === "undefined") {
+    console.error("GSAP not loaded, starting countdown anyway");
+    startCountdown();
+    return;
+  }
+
+  console.log("Starting logo flash animation with GSAP");
 
   // Flash effect from logo
   gsap.to(logo, {
@@ -359,6 +432,7 @@ function triggerLogoFlash() {
     duration: 0.3,
     ease: "power2.out",
     onComplete: () => {
+      console.log("Logo scale up complete, scaling back down");
       gsap.to(logo, {
         scale: 1,
         duration: 0.3,
@@ -373,8 +447,8 @@ function triggerLogoFlash() {
   flash.style.top = "50%";
   flash.style.left = "50%";
   flash.style.transform = "translate(-50%, -50%)";
-  flash.style.width = "300px";
-  flash.style.height = "300px";
+  flash.style.width = "18rem";
+  flash.style.height = "18rem";
   flash.style.borderRadius = "50%";
   flash.style.background =
     "radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, transparent 70%)";
@@ -437,34 +511,47 @@ function runCountdown() {
     count--;
     if (count > 0) {
       countdownNumber.textContent = count;
-      animateCountdownNumber();
-      // Only play tick sound for 3, 2, 1
+
+      // Play tick sound FIRST for 3, 2, 1 to sync with number display
       if (CONFIG.enableSound && count <= 3) {
         countdownTickSound.currentTime = 0;
         countdownTickSound.volume = 1.0;
+        countdownTickSound.playbackRate = 1.0;
         countdownTickSound
           .play()
           .catch((err) => console.log("Countdown tick error:", err));
       }
+
+      // Animate number after a tiny delay so sound and visual are in sync
+      setTimeout(() => {
+        animateCountdownNumber();
+      }, 500);
     } else {
       clearInterval(countdownInterval);
       triggerExplosion();
     }
-  }, 1000);
+  }, 1500); // Slower countdown: 1.5s per number
 }
 
 function animateCountdownNumber() {
   gsap.fromTo(
     countdownNumber,
-    { scale: 4, opacity: 0, rotation: -15 },
-    { scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: "back.out(2.5)" }
+    { scale: 5, opacity: 0, rotation: -20, filter: "blur(20px)" },
+    {
+      scale: 1,
+      opacity: 1,
+      rotation: 0,
+      filter: "blur(0px)",
+      duration: 0.8,
+      ease: "elastic.out(1, 0.5)",
+    }
   );
   const logo = document.getElementById("countdownLogoMocha35");
   if (logo) {
     gsap.fromTo(
       logo,
       { scale: 1 },
-      { scale: 1.05, duration: 0.25, ease: "power2.out", yoyo: true, repeat: 1 }
+      { scale: 1.1, duration: 0.4, ease: "power2.out", yoyo: true, repeat: 1 }
     );
   }
 }
@@ -487,52 +574,121 @@ function triggerExplosion() {
     }
   }, 1500);
 
-  // Fade out buttons quickly
-  const countdownButtons = countdownScreen.querySelectorAll(".touch-btn");
-  countdownButtons.forEach((btn) => {
-    gsap.to(btn, {
-      opacity: 0,
-      duration: 0.4,
-      ease: "power2.in",
-    });
-  });
+  // Create explosion effect
+  const explosionFlash = document.createElement("div");
+  explosionFlash.style.position = "fixed";
+  explosionFlash.style.inset = "0";
+  explosionFlash.style.background =
+    "radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(255, 0, 0, 0.6) 30%, transparent 70%)";
+  explosionFlash.style.zIndex = "100";
+  explosionFlash.style.pointerEvents = "none";
+  explosionFlash.style.opacity = "0";
+  countdownScreen.appendChild(explosionFlash);
 
-  // Blink countdown number then fade
-  gsap.to(countdownNumber, {
-    opacity: 0,
-    duration: 0.15,
-    repeat: 5,
-    yoyo: true,
+  // Flash explosion
+  gsap.to(explosionFlash, {
+    opacity: 1,
+    duration: 0.2,
+    ease: "power2.out",
     onComplete: () => {
-      gsap.to(countdownNumber, {
+      gsap.to(explosionFlash, {
         opacity: 0,
-        duration: 0.3,
+        duration: 0.5,
+        ease: "power2.in",
       });
     },
   });
 
-  // Scale up and fade out central logo
+  // Fade out buttons with scale
+  const countdownButtons = countdownScreen.querySelectorAll(".touch-btn");
+  countdownButtons.forEach((btn, index) => {
+    gsap.to(btn, {
+      opacity: 0,
+      scale: 0.5,
+      rotation: Math.random() * 360 - 180,
+      duration: 0.6,
+      delay: index * 0.05,
+      ease: "back.in(2)",
+    });
+  });
+
+  // Blink countdown number then explode
+  gsap.to(countdownNumber, {
+    opacity: 0,
+    scale: 1.3,
+    duration: 0.1,
+    repeat: 6,
+    yoyo: true,
+    onComplete: () => {
+      gsap.to(countdownNumber, {
+        scale: 3,
+        opacity: 0,
+        filter: "blur(30px)",
+        duration: 0.5,
+        ease: "power4.in",
+      });
+    },
+  });
+
+  // Scale up and fade out central logo with rotation
   const countdownLogo = document.getElementById("countdownLogoMocha35");
   setTimeout(() => {
     gsap.to(countdownLogo, {
-      scale: 2.5,
+      scale: 4,
       opacity: 0,
-      duration: 1.2,
-      ease: "power2.out",
+      rotation: 180,
+      filter: "blur(40px)",
+      duration: 1.5,
+      ease: "power4.in",
       onComplete: showFinalScreen,
     });
-  }, 1000);
+  }, 800);
 }
 
 function showFinalScreen() {
+  // Modern transition with scale and fade
   countdownScreen.classList.remove("active");
+
+  // Set initial state for final screen
+  finalScreen.style.opacity = "0";
+  finalScreen.style.transform = "scale(0.8)";
+  finalScreen.style.filter = "blur(20px)";
   finalScreen.classList.add("active");
+
+  // Animate in with modern effect
+  gsap.to(finalScreen, {
+    opacity: 1,
+    scale: 1,
+    filter: "blur(0px)",
+    duration: 1.2,
+    ease: "power3.out",
+  });
+
+  // Animate cards in with stagger
+  const cards = finalScreen.querySelectorAll(".page-card");
   gsap.fromTo(
-    finalScreen,
-    { opacity: 0 },
-    { opacity: 1, duration: 1, ease: "power2.out" }
+    cards,
+    {
+      opacity: 0,
+      y: 100,
+      scale: 0.8,
+      rotationY: -30,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      rotationY: 0,
+      duration: 1,
+      stagger: 0.3,
+      delay: 0.5,
+      ease: "back.out(1.5)",
+    }
   );
+
   initParticles("particles-final");
+  initCarousels();
+  setupCardClickHandlers();
 
   // Restart background music on final screen
   if (CONFIG.enableSound) {
@@ -591,5 +747,87 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "r" || e.key === "R") resetApp();
 });
 
-window.addEventListener("load", init);
+// Wait for GSAP to load
+function waitForGSAP(callback) {
+  if (typeof gsap !== "undefined") {
+    callback();
+  } else {
+    console.log("Waiting for GSAP to load...");
+    setTimeout(() => waitForGSAP(callback), 100);
+  }
+}
+
+window.addEventListener("load", () => {
+  waitForGSAP(init);
+});
+
 window.APP = { reset: resetApp, config: CONFIG };
+
+// ==================== CAROUSEL ====================
+function initCarousels() {
+  const carousels = document.querySelectorAll(".carousel-container");
+
+  carousels.forEach((carousel) => {
+    const track = carousel.querySelector(".carousel-track");
+    const dots = carousel.querySelectorAll(".carousel-dot");
+    let currentSlide = 0;
+    let autoplayInterval;
+
+    function goToSlide(index) {
+      currentSlide = index;
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % dots.length;
+      goToSlide(currentSlide);
+    }
+
+    // Dot click handlers
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", (e) => {
+        e.stopPropagation();
+        goToSlide(index);
+        clearInterval(autoplayInterval);
+        autoplayInterval = setInterval(nextSlide, 2000);
+      });
+    });
+
+    // Auto-play
+    autoplayInterval = setInterval(nextSlide, 2000);
+
+    // Pause on hover
+    carousel.addEventListener("mouseenter", () => {
+      clearInterval(autoplayInterval);
+    });
+
+    carousel.addEventListener("mouseleave", () => {
+      autoplayInterval = setInterval(nextSlide, 2000);
+    });
+  });
+}
+
+function setupCardClickHandlers() {
+  const cards = document.querySelectorAll(".page-card");
+
+  cards.forEach((card) => {
+    const link = card.getAttribute("data-link");
+    if (link) {
+      card.addEventListener("click", (e) => {
+        // Don't navigate if clicking on URL badge or carousel dots
+        if (
+          e.target.closest(".page-card-url") ||
+          e.target.closest(".carousel-dot")
+        ) {
+          return;
+        }
+        window.open(link, "_blank", "noopener,noreferrer");
+      });
+      card.style.cursor = "pointer";
+    }
+  });
+}

@@ -6,8 +6,8 @@
     <title>Lễ Ra Mắt Trang Thông Tin Điện Tử - Xã Thăng Trường</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
     <!-- Particles Background -->
@@ -142,30 +142,76 @@
         <div class="final-content">
             <div class="pages-container">
                 <!-- Website Card -->
-                <a href="https://thangtruong.danang.gov.vn/" id="websiteLink" class="page-card" target="_blank">
+                <div class="page-card" data-link="https://thangtruong.danang.gov.vn/">
                     <div class="page-card-glow"></div>
                     <div class="page-card-title">TRANG THÔNG TIN ĐIỆN TỬ<br>XÃ THĂNG TRƯỜNG - TP. ĐÀ NẴNG</div>
                     <div class="page-card-image">
-                        <img src="assets/opthangtruong_screen.png" alt="Trang Thông Tin Điện Tử">
+                        <div class="carousel-container" data-carousel="website">
+                            <div class="carousel-track">
+                                <div class="carousel-slide">
+                                    <img src="assets/opthangtruong_screen.png" alt="Screenshot 1" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="assets/opthangtruong_screen1.png" alt="Screenshot 2" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="assets/opthangtruong_screen2.png" alt="Screenshot 3" loading="lazy">
+                                </div>
+                                 <div class="carousel-slide">
+                                    <img src="assets/opthangtruong_screen3.png" alt="Screenshot 4" loading="lazy">
+                                </div>
+                            </div>
+                            <div class="carousel-dots">
+                                <span class="carousel-dot active" data-slide="0"></span>
+                                <span class="carousel-dot" data-slide="1"></span>
+                                <span class="carousel-dot" data-slide="2"></span>
+                                <span class="carousel-dot" data-slide="3"></span>
+                            </div>
+                        </div>
                         <div class="page-card-qr">
-                            <img src="assets/opthangtruong.png" alt="QR Code">
+                            <img src="assets/opthangtruong.png" alt="QR Code" loading="lazy">
                         </div>
                     </div>
-                    <div class="page-card-url">thangtruong.danang.gov.vn</div>
-                </a>
+                    <a href="https://thangtruong.danang.gov.vn/" class="page-card-url" target="_blank" rel="noopener noreferrer">
+                        thangtruong.danang.gov.vn
+                    </a>
+                </div>
 
                 <!-- Fanpage Card -->
-                <a href="https://www.facebook.com/xathangtruong" id="fanpageLink" class="page-card" target="_blank">
+                <div class="page-card" data-link="https://www.facebook.com/xathangtruong">
                     <div class="page-card-glow"></div>
                     <div class="page-card-title">FANPAGE FACEBOOK<br>XÃ THĂNG TRƯỜNG - TP. ĐÀ NẴNG</div>
                     <div class="page-card-image">
-                        <img src="assets/fbthangtruong_screen.png" alt="Fanpage Facebook">
+                        <div class="carousel-container" data-carousel="fanpage">
+                            <div class="carousel-track">
+                                <div class="carousel-slide">
+                                    <img src="assets/fbthangtruong_screen.png" alt="Screenshot 1" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="assets/fbthangtruong_screen1.png" alt="Screenshot 2" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="assets/fbthangtruong_screen2.png" alt="Screenshot 3" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="assets/fbthangtruong_screen3.png" alt="Screenshot 4" loading="lazy">
+                                </div>
+                            </div>
+                            <div class="carousel-dots">
+                                <span class="carousel-dot active" data-slide="0"></span>
+                                <span class="carousel-dot" data-slide="1"></span>
+                                <span class="carousel-dot" data-slide="2"></span>
+                                <span class="carousel-dot" data-slide="3"></span>
+                            </div>
+                        </div>
                         <div class="page-card-qr">
-                            <img src="assets/fbthantruong.png" alt="QR Code">
+                            <img src="assets/fbthantruong.png" alt="QR Code" loading="lazy">
                         </div>
                     </div>
-                    <div class="page-card-url">facebook.com/xathangtruong</div>
-                </a>
+                    <a href="https://www.facebook.com/xathangtruong" class="page-card-url" target="_blank" rel="noopener noreferrer">
+                        facebook.com/xathangtruong
+                    </a>
+                </div>
             </div>
         </div>
     </div>

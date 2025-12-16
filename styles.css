@@ -1,4 +1,45 @@
-/* Reset & Base */
+/* ==================== CSS VARIABLES ==================== */
+:root {
+    /* Colors */
+    --color-gold: #FFD700;
+    --color-gold-light: #FFF4C0;
+    --color-gold-dark: #FFA500;
+    --color-red: #FF0000;
+    --color-red-bright: #FF1744;
+    --color-red-dark: #C62828;
+    --color-red-darker: #140000;
+    --color-white: #FFFFFF;
+    --color-black: #000000;
+    
+    /* Spacing - Base 16px */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 2rem;
+    --space-lg: 4rem;
+    --space-xl: 8rem;
+    
+    /* Typography - Fluid Scaling */
+    --font-size-base: clamp(1rem, 0.6vw + 0.85rem, 1.2rem);
+    --font-size-sm: clamp(1.5rem, 1vw + 1rem, 2rem);
+    --font-size-md: clamp(2rem, 1.5vw + 1.5rem, 3.5rem);
+    --font-size-lg: clamp(3rem, 3vw + 2rem, 6rem);
+    --font-size-xl: clamp(4rem, 4vw + 3rem, 8rem);
+    --font-size-xxl: clamp(6rem, 7vw + 4rem, 14rem);
+    
+    /* Component Sizes - Viewport Based */
+    --button-size: clamp(10rem, 20vw, 30rem);
+    --logo-size: clamp(25rem, 45vw, 75rem);
+    --card-width: clamp(20rem, 35vw, 45rem);
+    --card-height: clamp(30rem, 50vh, 60rem);
+    
+    /* Effects */
+    --shadow-glow-gold: 0 0 2rem rgba(255, 215, 0, 0.6);
+    --shadow-glow-red: 0 0 2rem rgba(220, 20, 60, 0.6);
+    --transition-base: all 0.4s ease;
+    --transition-fast: all 0.2s ease;
+}
+
+/* ==================== RESET & BASE ==================== */
 * {
     margin: 0;
     padding: 0;
@@ -7,92 +48,59 @@
 
 body {
     font-family: 'Times New Roman', Times, serif;
+    font-size: var(--font-size-base);
     overflow: hidden;
-    background: #000 url('assets/background.jpg') center center / cover no-repeat;
+    background: var(--color-black) url('assets/background.jpg') center center / cover no-repeat;
     background-attachment: fixed;
-    background-size: cover;
-    color: #fff;
+    color: var(--color-white);
     width: 100vw;
     height: 100vh;
     position: fixed;
-    top: 0;
-    left: 0;
-    margin: 0;
-    padding: 0;
-    zoom: 0.33;
+    inset: 0;
 }
 
 body::before {
     content: '';
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(139, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(139, 0, 0, 0.2) 100%);
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(198, 40, 40, 0.2) 0%, 
+        rgba(0, 0, 0, 0.3) 50%, 
+        rgba(198, 40, 40, 0.2) 100%);
     z-index: 0;
     pointer-events: none;
-    zoom: 3.03;
 }
 
 body::after {
     content: '';
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background: url('assets/bualuoiliem.jpg') center center / cover no-repeat;
+    inset: 0;
+    background: url('assets/bualuoiliem.jpg') center 55% / cover no-repeat;
+    background-size: 150%;
     opacity: 0.15;
     z-index: 1;
     pointer-events: none;
-    zoom: 3.03;
 }
 
-/* Particles */
-#particles-js, #particles-final {
+/* ==================== PARTICLES & CANVAS ==================== */
+#particles-js, 
+#particles-final {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    min-width: 100%;
-    min-height: 100%;
+    inset: 0;
     z-index: 2;
 }
 
-/* Energy System Canvas */
 .energy-system-canvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    min-width: 100%;
-    min-height: 100%;
+    inset: 0;
     z-index: 3;
     pointer-events: none;
 }
 
-/* Screen Management */
+/* ==================== SCREEN MANAGEMENT ==================== */
 .screen {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    min-width: 100%;
-    min-height: 100%;
+    inset: 0;
     z-index: 10;
     display: none;
     opacity: 0;
@@ -113,128 +121,121 @@ body::after {
     position: relative;
 }
 
-/* Header & Event Section - Combined */
+/* ==================== HEADER & EVENT ==================== */
 .header {
     position: fixed;
-    top: 15rem;
+    top: clamp(3rem, 8vh, 8rem);
     left: 0;
     right: 0;
-    width: 100%;
     text-align: center;
     z-index: 10;
-    padding: 1rem 2rem;
+    padding: var(--space-sm) var(--space-md);
 }
 
-.emblem-container {
-    display: none;
-}
-
+.emblem-container,
 .emblem-img {
     display: none;
 }
 
 .org-main {
-    font-size: 3.5rem;
+    font-size: var(--font-size-lg);
     font-weight: normal;
-    color: #FFD700;
-    letter-spacing: 5px;
+    color: var(--color-gold);
+    letter-spacing: 0.3rem;
     text-shadow: 
-        0 0 40px rgba(255, 215, 0, 1),
-        0 0 80px rgba(255, 215, 0, 0.6),
-        3px 3px 6px rgba(0, 0, 0, 0.9);
-    margin-bottom: 1rem;
+        0 0 2rem var(--color-gold),
+        0 0 4rem rgba(255, 215, 0, 0.6),
+        0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.9);
+    margin-bottom: var(--space-sm);
 }
 
 .org-departments {
-    font-size: 3.5rem;
-    color: #fff;
+    font-size: var(--font-size-lg);
+    color: var(--color-white);
     font-weight: bold;
-    letter-spacing: 3px;
+    letter-spacing: 0.2rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: var(--space-md);
     flex-wrap: wrap;
-    margin-bottom: 2.5rem;
+    margin-bottom: var(--space-md);
     text-shadow: 
-        0 0 30px rgba(255, 255, 255, 0.9),
-        3px 3px 6px rgba(0, 0, 0, 0.9);
+        0 0 1.5rem rgba(255, 255, 255, 0.9),
+        0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.9);
 }
 
 .dept-separator {
-    color: #FFD700;
-    font-size: 3.5rem;
-    text-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
+    color: var(--color-gold);
+    font-size: var(--font-size-lg);
+    text-shadow: 0 0 1.5rem var(--color-gold);
 }
 
-/* Event Section */
 .event-section {
     text-align: center;
     z-index: 10;
 }
 
 .event-title {
-    font-size: 18rem;
+    font-size: var(--font-size-xxl);
     font-weight: 900;
-    color: #DC143C;
-    letter-spacing: 12px;
+    color: var(--color-red);
+    letter-spacing: clamp(0.3rem, 0.8vw, 0.8rem);
     text-transform: uppercase;
-    margin-bottom: 2rem;
-    /* WordArt effect - Red */
-    background: linear-gradient(180deg, #FF6B6B 0%, #DC143C 50%, #8B0000 100%);
+    margin-bottom: var(--space-md);
+    background: linear-gradient(180deg, #FF5252 0%, var(--color-red) 50%, var(--color-red-dark) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 60px rgba(220, 20, 60, 1))
-            drop-shadow(0 0 120px rgba(220, 20, 60, 0.8))
-            drop-shadow(6px 6px 12px rgba(0, 0, 0, 0.9));
-    -webkit-text-stroke: 3px rgba(255, 215, 0, 0.8);
+    filter: drop-shadow(0 0 3rem var(--color-red-bright))
+            drop-shadow(0 0 6rem rgba(255, 23, 68, 0.8))
+            drop-shadow(0.4rem 0.4rem 0.8rem rgba(0, 0, 0, 0.9));
+    -webkit-text-stroke: 0.15rem rgba(255, 215, 0, 0.8);
     paint-order: stroke fill;
 }
 
 .event-subtitle {
-    font-size: 6rem;
+    font-size: var(--font-size-xl);
     font-weight: 900;
-    color: #fff;
-    letter-spacing: 5px;
-    margin-bottom: 0rem;
+    color: var(--color-white);
+    letter-spacing: clamp(0.2rem, 0.5vw, 0.5rem);
+    margin-bottom: 0;
     line-height: 1.5;
-    /* WordArt effect */
-    background: linear-gradient(180deg, #ffffff 0%, #FFD700 50%, #FFA500 100%);
+    background: linear-gradient(180deg, var(--color-white) 0%, var(--color-gold) 50%, var(--color-gold-dark) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1))
-            drop-shadow(0 0 100px rgba(255, 215, 0, 0.7))
-            drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.95));
-    -webkit-text-stroke: 2px rgba(220, 20, 60, 0.6);
+    filter: drop-shadow(0 0 2.5rem var(--color-gold))
+            drop-shadow(0 0 5rem rgba(255, 215, 0, 0.7))
+            drop-shadow(0.3rem 0.3rem 0.6rem rgba(0, 0, 0, 0.95));
+    -webkit-text-stroke: 0.1rem rgba(255, 23, 68, 0.6);
 }
 
 .event-date {
-    font-size: 2.5rem;
-    color: #fff;
-    margin-top: 1.5rem;
+    font-size: var(--font-size-md);
+    color: var(--color-white);
+    margin-top: var(--space-sm);
     font-style: italic;
     font-weight: 600;
     text-shadow: 
-        0 0 30px rgba(255, 255, 255, 0.9),
-        3px 3px 6px rgba(0, 0, 0, 0.9);
+        0 0 1.5rem rgba(255, 255, 255, 0.9),
+        0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.9);
 }
 
-/* Central Logo MOCHA35 */
+/* ==================== CENTRAL LOGO ==================== */
 .central-logo-section {
     position: fixed;
-    top: 48%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(2.2);
+    transform: translate(-50%, -50%);
     z-index: 2;
     pointer-events: none;
 }
 
 .logo-mocha35 {
     position: relative;
-    width: 800px;
-    height: 800px;
+    width: var(--logo-size);
+    height: var(--logo-size);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -246,9 +247,12 @@ body::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(220, 20, 60, 0.3) 0%, rgba(139, 0, 0, 0.2) 50%, transparent 70%);
+    width: 62.5%;
+    height: 62.5%;
+    background: radial-gradient(circle, 
+        rgba(255, 0, 0, 0.3) 0%, 
+        rgba(198, 40, 40, 0.2) 50%, 
+        transparent 70%);
     border-radius: 50%;
     z-index: 2;
 }
@@ -256,15 +260,15 @@ body::after {
 .logo-content {
     position: relative;
     z-index: 6;
-    width: 650px;
-    height: 650px;
+    width: 81.25%;
+    height: 81.25%;
 }
 
 .mocha35-img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9));
+    filter: drop-shadow(0 0 1.5rem var(--color-gold));
 }
 
 .logo-glow-outer {
@@ -272,11 +276,11 @@ body::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 880px;
-    height: 880px;
+    width: 110%;
+    height: 110%;
     background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
     z-index: 2;
-    transition: all 0.5s ease;
+    transition: var(--transition-base);
 }
 
 .logo-glow-inner {
@@ -284,11 +288,11 @@ body::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 450px;
-    height: 450px;
-    background: radial-gradient(circle, rgba(220, 20, 60, 0.3) 0%, transparent 70%);
+    width: 56.25%;
+    height: 56.25%;
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%);
     z-index: 2;
-    transition: all 0.5s ease;
+    transition: var(--transition-base);
 }
 
 .logo-mocha35.energized .logo-glow-outer {
@@ -297,7 +301,7 @@ body::after {
 }
 
 .logo-mocha35.energized .logo-glow-inner {
-    background: radial-gradient(circle, rgba(220, 20, 60, 0.7) 0%, rgba(220, 20, 60, 0.4) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 23, 68, 0.7) 0%, rgba(255, 0, 0, 0.4) 50%, transparent 70%);
     opacity: 1;
 }
 
@@ -307,65 +311,65 @@ body::after {
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    border: 3px dashed;
+    border: 0.15rem dashed;
     z-index: 3;
 }
 
 .logo-ring-1 {
-    width: 680px;
-    height: 680px;
+    width: 85%;
+    height: 85%;
     border-color: rgba(255, 215, 0, 0.4);
     animation: ringRotate 12s linear infinite;
 }
 
 .logo-ring-2 {
-    width: 620px;
-    height: 620px;
-    border-color: rgba(220, 20, 60, 2.8);
+    width: 77.5%;
+    height: 77.5%;
+    border-color: rgba(255, 23, 68, 0.8);
     animation: ringRotate 10s linear infinite reverse;
 }
 
 .logo-ring-3 {
-    width: 680px;
-    height: 680px;
+    width: 85%;
+    height: 85%;
     border-color: rgba(255, 215, 0, 0.35);
-    border-width: 3px;
+    border-width: 0.15rem;
     animation: ringRotate 14s linear infinite;
     transition: border-width 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
 .logo-ring-3.progress-1 {
-    border-width: 4px;
+    border-width: 0.2rem;
     border-color: rgba(255, 215, 0, 0.45);
 }
 
 .logo-ring-3.progress-2 {
-    border-width: 5px;
+    border-width: 0.25rem;
     border-color: rgba(255, 215, 0, 0.55);
 }
 
 .logo-ring-3.progress-3 {
-    border-width: 6px;
+    border-width: 0.3rem;
     border-color: rgba(255, 215, 0, 0.65);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0 0.6rem rgba(255, 215, 0, 0.4);
 }
 
 .logo-ring-3.progress-4 {
-    border-width: 7px;
+    border-width: 0.35rem;
     border-color: rgba(255, 215, 0, 0.75);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 0.9rem rgba(255, 215, 0, 0.5);
 }
 
 .logo-ring-3.progress-5 {
-    border-width: 8px;
+    border-width: 0.4rem;
     border-color: rgba(255, 215, 0, 0.85);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 1.2rem rgba(255, 215, 0, 0.6);
 }
 
 .logo-ring-3.progress-6 {
-    border-width: 10px;
+    border-width: 0.5rem;
     border-color: rgba(255, 215, 0, 0.95);
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+    box-shadow: 0 0 1.8rem rgba(255, 215, 0, 0.8);
 }
 
 .logo-mocha35.energized .logo-ring-1 {
@@ -376,8 +380,8 @@ body::after {
 
 .logo-mocha35.energized .logo-ring-2 {
     animation: ringRotateFast 2.5s linear infinite reverse;
-    border-color: rgba(220, 20, 60, 0.8);
-    box-shadow: 0 0 20px rgba(220, 20, 60, 0.6);
+    border-color: rgba(255, 23, 68, 0.8);
+    box-shadow: 0 0 1.2rem rgba(255, 23, 68, 0.6);
 }
 
 .logo-mocha35.energized .logo-ring-3 {
@@ -401,16 +405,15 @@ body::after {
     display: none;
 }
 
-/* Touch Section */
+/* ==================== TOUCH SECTION ==================== */
 .touch-section {
     position: fixed;
-    bottom: 70vh;
+    bottom: 30vh;
     left: 0;
     right: 0;
     z-index: 10;
 }
 
-/* Energy Bar - Rendered by Canvas */
 .energy-bar-container {
     display: none;
 }
@@ -420,32 +423,32 @@ body::after {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0 3rem;
+    padding: 0 var(--space-md);
     position: relative;
     z-index: 2;
 }
 
 .touch-group {
     display: flex;
-    gap: 15rem;
+    gap: clamp(15rem, 20vw, 30rem);
     flex: 1;
 }
 
 .touch-group-left {
-    justify-content: center;
-    padding-right: 8rem;
+    justify-content: flex-start;
+    padding-left: clamp(2rem, 4vw, 6rem);
 }
 
 .touch-group-right {
-    justify-content: center;
-    padding-left: 8rem;
+    justify-content: flex-end;
+    padding-right: clamp(2rem, 4vw, 6rem);
 }
 
-/* Touch Buttons */
+/* ==================== TOUCH BUTTONS ==================== */
 .touch-btn {
     position: relative;
-    width: 550px;
-    height: 550px;
+    width: var(--button-size);
+    height: var(--button-size);
     border-radius: 50%;
     border: none;
     background: radial-gradient(circle at center, 
@@ -453,14 +456,13 @@ body::after {
         rgba(255, 180, 0, 0.25) 50%,
         rgba(200, 150, 0, 0.3) 100%);
     cursor: pointer;
-    transition: all 0.4s ease;
+    transition: var(--transition-base);
     box-shadow: 
-        0 0 20px rgba(255, 215, 0, 0.4),
-        0 0 40px rgba(255, 215, 0, 0.2),
-        inset 0 0 20px rgba(255, 255, 200, 0.3);
+        0 0 1.2rem rgba(255, 215, 0, 0.4),
+        0 0 2.4rem rgba(255, 215, 0, 0.2),
+        inset 0 0 1.2rem rgba(255, 255, 200, 0.3);
 }
 
-/* Button Rings */
 .btn-outer-ring {
     position: absolute;
     top: 50%;
@@ -469,7 +471,7 @@ body::after {
     width: 130%;
     height: 130%;
     border-radius: 50%;
-    border: 5px dashed rgba(255, 215, 0, 0.5);
+    border: 0.25rem dashed rgba(255, 215, 0, 0.5);
     animation: outerRingRotate 8s linear infinite;
 }
 
@@ -481,7 +483,7 @@ body::after {
     width: 115%;
     height: 115%;
     border-radius: 50%;
-    border: 5px dashed rgba(255, 215, 0, 0.4);
+    border: 0.25rem dashed rgba(255, 215, 0, 0.4);
     animation: innerRingRotate 6s linear infinite reverse;
 }
 
@@ -533,7 +535,7 @@ body::after {
     filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.7));
 }
 
-/* Activated State */
+/* ==================== ACTIVATED STATE ==================== */
 .touch-btn.activated {
     background: radial-gradient(circle at center, 
         rgba(255, 255, 200, 0.9) 0%,
@@ -541,36 +543,36 @@ body::after {
         rgba(255, 180, 0, 0.9) 100%);
     animation: btnActivatedPulse 1s ease-in-out infinite;
     box-shadow: 
-        0 0 60px rgba(255, 215, 0, 1),
-        0 0 120px rgba(255, 215, 0, 0.9),
-        0 0 180px rgba(255, 215, 0, 0.7),
-        0 0 240px rgba(255, 215, 0, 0.5),
-        inset 0 0 60px rgba(255, 255, 220, 0.9);
+        0 0 3.6rem rgba(255, 215, 0, 1),
+        0 0 7.2rem rgba(255, 215, 0, 0.9),
+        0 0 10.8rem rgba(255, 215, 0, 0.7),
+        0 0 14.4rem rgba(255, 215, 0, 0.5),
+        inset 0 0 3.6rem rgba(255, 255, 220, 0.9);
 }
 
 @keyframes btnActivatedPulse {
     0%, 100% {
         box-shadow: 
-            0 0 60px rgba(255, 215, 0, 1),
-            0 0 120px rgba(255, 215, 0, 0.9),
-            0 0 180px rgba(255, 215, 0, 0.7),
-            0 0 240px rgba(255, 215, 0, 0.5);
+            0 0 3.6rem rgba(255, 215, 0, 1),
+            0 0 7.2rem rgba(255, 215, 0, 0.9),
+            0 0 10.8rem rgba(255, 215, 0, 0.7),
+            0 0 14.4rem rgba(255, 215, 0, 0.5);
     }
     50% {
         box-shadow: 
-            0 0 90px rgba(255, 215, 0, 1),
-            0 0 180px rgba(255, 215, 0, 1),
-            0 0 270px rgba(255, 215, 0, 0.9),
-            0 0 360px rgba(255, 215, 0, 0.7);
+            0 0 5.4rem rgba(255, 215, 0, 1),
+            0 0 10.8rem rgba(255, 215, 0, 1),
+            0 0 16.2rem rgba(255, 215, 0, 0.9),
+            0 0 21.6rem rgba(255, 215, 0, 0.7);
     }
 }
 
 .touch-btn.activated .btn-outer-ring {
     border-color: rgba(255, 255, 200, 1);
-    border-width: 9px;
+    border-width: 0.45rem;
     border-style: solid;
     animation: activatedRingRotate 2s linear infinite, activatedRingExpand 0.5s ease-out forwards;
-    box-shadow: 0 0 70px rgba(255, 215, 0, 1);
+    box-shadow: 0 0 4rem rgba(255, 215, 0, 1);
 }
 
 @keyframes activatedRingExpand {
@@ -586,10 +588,10 @@ body::after {
 
 .touch-btn.activated .btn-inner-ring {
     border-color: rgba(255, 215, 0, 1);
-    border-width: 7px;
+    border-width: 0.35rem;
     border-style: solid;
     animation: activatedRingRotate 1.5s linear infinite reverse;
-    box-shadow: 0 0 35px rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 2rem rgba(255, 215, 0, 0.6);
 }
 
 @keyframes activatedRingRotate {
@@ -597,61 +599,42 @@ body::after {
     to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-.touch-btn.activated .handprint-img {
+.touch-btn.activated .handprint-img,
+.touch-btn.activated .handprint-img-left {
     filter: 
-        drop-shadow(0 0 35px rgba(255, 255, 200, 1))
-        drop-shadow(0 0 70px rgba(255, 215, 0, 1))
-        drop-shadow(0 0 105px rgba(255, 215, 0, 0.8));
+        drop-shadow(0 0 2rem rgba(255, 255, 200, 1))
+        drop-shadow(0 0 4rem rgba(255, 215, 0, 1))
+        drop-shadow(0 0 6rem rgba(255, 215, 0, 0.8));
 }
 
-/* Countdown Screen */
+/* ==================== COUNTDOWN SCREEN ==================== */
 #countdownScreen {
     justify-content: center;
     align-items: center;
-    background: #000 url('assets/background.jpg') center center / cover no-repeat;
+    background: var(--color-black) url('assets/background.jpg') center center / cover no-repeat;
     background-attachment: fixed;
-    background-size: cover;
     position: relative;
 }
-
-/* COMMENTED: Original countdown screen styles (can be reused)
-#countdownScreen {
-    justify-content: center;
-    align-items: center;
-    background: #000 url('assets/background.jpg') center center / cover no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    position: absolute;
-}
-*/
 
 #countdownScreen::before {
     content: '';
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(20, 0, 0, 0.85) 0%, rgba(10, 0, 0, 0.9) 50%, rgba(20, 0, 0, 0.85) 100%);
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(40, 0, 0, 0.85) 0%, 
+        rgba(20, 0, 0, 0.9) 50%, 
+        rgba(40, 0, 0, 0.85) 100%);
     z-index: 0;
-    zoom: 3.03;
 }
 
 #countdownScreen::after {
     content: '';
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background: url('assets/bualuoiliem.jpg') center 55% / auto 150% no-repeat;
+    inset: 0;
+    background: url('assets/bualuoiliem.jpg') center 55% / cover no-repeat;
+    background-size: 150%;
     opacity: 0.1;
     z-index: 1;
-    zoom: 3.03;
 }
 
 .countdown-canvas {
@@ -676,20 +659,20 @@ body::after {
     z-index: 10;
 }
 
-/* Countdown Logo Section - EXACT COPY of Central Logo */
+/* Countdown Logo - Matches Central Logo */
 .countdown-logo-section {
     position: fixed;
-    top: 48%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(2.2);
+    transform: translate(-50%, -50%);
     z-index: 2;
     pointer-events: none;
 }
 
 .countdown-logo-mocha35 {
     position: relative;
-    width: 800px;
-    height: 800px;
+    width: var(--logo-size);
+    height: var(--logo-size);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -701,9 +684,12 @@ body::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(220, 20, 60, 0.3) 0%, rgba(139, 0, 0, 0.2) 50%, transparent 70%);
+    width: 62.5%;
+    height: 62.5%;
+    background: radial-gradient(circle, 
+        rgba(255, 0, 0, 0.3) 0%, 
+        rgba(198, 40, 40, 0.2) 50%, 
+        transparent 70%);
     border-radius: 50%;
     z-index: 2;
 }
@@ -711,15 +697,15 @@ body::after {
 .countdown-logo-mocha35 .logo-content {
     position: relative;
     z-index: 6;
-    width: 650px;
-    height: 650px;
+    width: 81.25%;
+    height: 81.25%;
 }
 
 .countdown-logo-mocha35 .mocha35-img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9));
+    filter: drop-shadow(0 0 1.5rem var(--color-gold));
 }
 
 .countdown-logo-mocha35 .logo-glow-outer {
@@ -727,11 +713,11 @@ body::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 880px;
-    height: 880px;
+    width: 110%;
+    height: 110%;
     background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
     z-index: 2;
-    transition: all 0.5s ease;
+    transition: var(--transition-base);
 }
 
 .countdown-logo-mocha35 .logo-glow-inner {
@@ -739,11 +725,11 @@ body::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 450px;
-    height: 450px;
-    background: radial-gradient(circle, rgba(220, 20, 60, 0.3) 0%, transparent 70%);
+    width: 56.25%;
+    height: 56.25%;
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%);
     z-index: 2;
-    transition: all 0.5s ease;
+    transition: var(--transition-base);
 }
 
 .countdown-logo-mocha35 .logo-ring {
@@ -752,80 +738,75 @@ body::after {
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    border: 3px dashed;
+    border: 0.15rem dashed;
     z-index: 3;
 }
 
 .countdown-logo-mocha35 .logo-ring-1 {
-    width: 680px;
-    height: 680px;
+    width: 85%;
+    height: 85%;
     border-color: rgba(255, 215, 0, 0.4);
     animation: ringRotate 12s linear infinite;
 }
 
 .countdown-logo-mocha35 .logo-ring-2 {
-    width: 620px;
-    height: 620px;
-    border-color: rgba(220, 20, 60, 0.8);
+    width: 77.5%;
+    height: 77.5%;
+    border-color: rgba(255, 23, 68, 0.8);
     animation: ringRotate 10s linear infinite reverse;
 }
 
 .countdown-logo-mocha35 .logo-ring-3 {
-    width: 680px;
-    height: 680px;
+    width: 85%;
+    height: 85%;
     border-color: rgba(255, 215, 0, 0.35);
-    border-width: 3px;
+    border-width: 0.15rem;
     animation: ringRotate 14s linear infinite;
     transition: border-width 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
-/* Countdown Touch Section */
 .countdown-touch-section {
     position: fixed;
-    bottom: 70vh;
+    bottom: 30vh;
     left: 0;
     right: 0;
     z-index: 10;
 }
 
-@keyframes countdownRingRotate {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
 .countdown-number {
     font-family: 'Orbitron', monospace;
-    font-size: 18rem;
+    font-size: clamp(12rem, 20vw, 24rem);
     font-weight: 900;
-    color: #FFD700;
+    color: var(--color-gold);
     text-shadow: 
-        0 0 40px rgba(255, 215, 0, 1),
-        0 0 80px rgba(255, 215, 0, 0.9),
-        0 0 120px rgba(220, 20, 60, 0.7);
+        0 0 3rem var(--color-gold),
+        0 0 6rem rgba(255, 215, 0, 0.9),
+        0 0 9rem rgba(255, 23, 68, 0.7),
+        0 0 12rem rgba(255, 23, 68, 0.5);
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 6;
-    -webkit-text-stroke: 5px rgba(255, 180, 0, 0.9);
-    letter-spacing: -10px;
+    -webkit-text-stroke: 0.4rem rgba(255, 180, 0, 0.9);
+    letter-spacing: -0.8rem;
 }
 
-/* Final Screen */
+/* ==================== FINAL SCREEN ==================== */
 #finalScreen {
     justify-content: center;
     align-items: center;
-    background: #000 url('assets/background.jpg') center center / cover no-repeat;
+    background: var(--color-black) url('assets/background.jpg') center center / cover no-repeat;
 }
 
 #finalScreen::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(139, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(139, 0, 0, 0.4) 100%);
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(198, 40, 40, 0.4) 0%, 
+        rgba(0, 0, 0, 0.5) 50%, 
+        rgba(198, 40, 40, 0.4) 100%);
     z-index: 1;
 }
 
@@ -837,52 +818,54 @@ body::after {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 3rem;
+    padding: var(--space-md);
 }
 
 .pages-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 24vw;
+    gap: 30rem;
     width: 100%;
-    max-width: 100%;
 }
 
 .page-card {
     position: relative;
-    width: 120vw;
-    height: 150vh;
-    background: rgba(0, 0, 0, 0.75);
-    border: 15px solid rgba(255, 215, 0, 0.6);
-    border-radius: 60px;
-    padding: 4vh 6vw 6vh 6vw;
+    width: 200rem;
+    height: auto;
+    min-height: 225rem;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 0, 0, 0.9) 100%);
+    border: 2.5rem solid rgba(255, 215, 0, 0.7);
+    border-radius: 5rem;
+    padding: 10rem;
     text-decoration: none;
-    transition: all 0.5s ease;
+    transition: var(--transition-base);
     overflow: visible;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 3vh;
+    gap: 10rem;
     cursor: pointer;
+    box-shadow: 
+        0 5rem 15rem rgba(0, 0, 0, 0.8),
+        0 0 10rem rgba(255, 215, 0, 0.3);
+    backdrop-filter: blur(10px);
 }
 
 .page-card:hover {
-    background: rgba(0, 0, 0, 0.85);
-    border-color: #FFD700;
+    background: linear-gradient(135deg, rgba(20, 0, 0, 0.95) 0%, rgba(40, 0, 0, 1) 100%);
+    border-color: var(--color-gold);
     box-shadow: 
-        0 0 60px rgba(255, 215, 0, 0.8),
-        0 0 100px rgba(255, 215, 0, 0.5);
-    transform: scale(1.05);
+        0 2rem 8rem rgba(0, 0, 0, 0.9),
+        0 0 6rem rgba(255, 215, 0, 0.8),
+        0 0 10rem rgba(255, 215, 0, 0.5);
+    transform: translateY(-1rem) scale(1.03);
 }
 
 .page-card-glow {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
     opacity: 0;
     transition: opacity 0.5s ease;
@@ -893,25 +876,86 @@ body::after {
     opacity: 1;
 }
 
-.page-card:hover .page-card-glow {
-    opacity: 1;
-}
-
 .page-card-image {
     position: relative;
     width: 100%;
-    flex: 1;
-    border-radius: 12px;
-    overflow: visible;
-    border: 3px solid rgba(255, 215, 0, 0.5);
-    background: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-    transition: all 0.5s ease;
+    aspect-ratio: 16 / 9;
+    border-radius: 2.5rem;
+    overflow: hidden;
+    border: 0.5rem solid rgba(255, 215, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
+    box-shadow: 
+        0 2.5rem 7.5rem rgba(0, 0, 0, 0.7),
+        inset 0 0 5rem rgba(0, 0, 0, 0.5);
+    transition: var(--transition-base);
+}
+
+/* Carousel Container */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Carousel Navigation Dots */
+.carousel-dots {
+    position: absolute;
+    bottom: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 3.75rem;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2.5rem 5rem;
+    border-radius: 7.5rem;
+    backdrop-filter: blur(5px);
+}
+
+.carousel-dot {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: rgba(255, 215, 0, 0.4);
+    border: 0.5rem solid rgba(255, 215, 0, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+    background: var(--color-gold);
+    border-color: var(--color-gold-light);
+    transform: scale(1.5);
+    box-shadow: 0 0 3.75rem rgba(255, 215, 0, 0.8);
+}
+
+.carousel-dot:hover {
+    background: rgba(255, 215, 0, 0.7);
+    transform: scale(1.3);
 }
 
 .page-card:hover .page-card-image {
-    border-color: #FFD700;
-    box-shadow: 0 10px 60px rgba(255, 215, 0, 0.4);
+    border-color: var(--color-gold);
+    box-shadow: 0 1.5rem 9rem rgba(255, 215, 0, 0.4);
 }
 
 .page-card-image img {
@@ -920,7 +964,7 @@ body::after {
     object-fit: cover;
     opacity: 0.8;
     transition: opacity 0.5s ease;
-    border-radius: 10px;
+    border-radius: 0.6rem;
 }
 
 .page-card:hover .page-card-image img {
@@ -929,15 +973,15 @@ body::after {
 
 .page-card-qr {
     position: absolute;
-    bottom: 30px;
-    right: 30px;
-    width: 480px;
-    height: 480px;
+    bottom: 5rem;
+    right: 5rem;
+    width: 50rem;
+    height: 50rem;
     background: rgba(255, 255, 255, 0.95);
-    border: 8px solid rgba(255, 215, 0, 0.8);
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
+    border: 1.25rem solid rgba(255, 215, 0, 0.8);
+    border-radius: 2.5rem;
+    padding: 2.5rem;
+    box-shadow: 0 1.25rem 6rem rgba(0, 0, 0, 0.7);
     z-index: 2;
 }
 
@@ -949,52 +993,81 @@ body::after {
 
 .page-card-title {
     font-family: 'Times New Roman', serif;
-    font-size: 2.2rem;
+    font-size: 8.75rem;
     font-weight: 700;
-    color: #FFD700;
+    color: var(--color-gold);
     text-align: center;
     text-shadow: 
-        0 0 25px rgba(255, 215, 0, 0.8),
-        0 0 50px rgba(255, 215, 0, 0.4);
-    letter-spacing: 1px;
+        0 0 3.75rem rgba(255, 215, 0, 0.8),
+        0 0 7.5rem rgba(255, 215, 0, 0.4);
+    letter-spacing: 0.125rem;
     margin: 0;
-    line-height: 1.3;
-}
-
-.page-card:first-child .page-card-title {
-    font-size: 2.5rem;
+    line-height: 1.4;
 }
 
 .page-card-url {
     font-family: 'Orbitron', monospace;
-    font-size: 2.75rem;
-    font-weight: 500;
-    color: rgba(255, 215, 0, 0.95);
+    font-size: 7.5rem;
+    font-weight: 600;
+    color: var(--color-gold);
     text-align: center;
-    padding: 0.8rem 1.5rem;
-    background: rgba(255, 215, 0, 0.1);
-    border: 2px solid rgba(255, 215, 0, 0.4);
-    border-radius: 8px;
-    transition: all 0.4s ease;
+    padding: 3.75rem 7.5rem;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 180, 0, 0.3) 100%);
+    border: 0.75rem solid var(--color-gold);
+    border-radius: 7.5rem;
+    transition: var(--transition-base);
     text-decoration: none;
+    box-shadow: 
+        0 1.25rem 5rem rgba(0, 0, 0, 0.5),
+        0 0 5rem rgba(255, 215, 0, 0.4);
+    position: relative;
+    margin-top: 5rem;
+    letter-spacing: 0.375rem;
 }
 
 .page-card:hover .page-card-url {
-    background: rgba(255, 215, 0, 0.2);
-    border-color: #FFD700;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-    color: #FFD700;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(255, 180, 0, 0.5) 100%);
+    border-color: var(--color-gold-light);
+    box-shadow: 
+        0 0.5rem 2rem rgba(0, 0, 0, 0.6),
+        0 0 3rem rgba(255, 215, 0, 0.8),
+        inset 0 0 2rem rgba(255, 215, 0, 0.3);
+    color: var(--color-gold-light);
+    transform: scale(1.05);
 }
 
-/* Responsive */
-@media (max-width: 1400px) {
-    .touch-btn { width: 140px; height: 140px; }
-    .touch-group { gap: 2rem; }
-    .event-title { font-size: 2.5rem; }
-}
-
+/* ==================== RESPONSIVE ==================== */
 @media (max-width: 1200px) {
-    .touch-btn { width: 120px; height: 120px; }
-    .pages-container { flex-direction: column; align-items: center; gap: 2rem; }
-    .page-card { width: 350px; }
+    :root {
+        --button-size: clamp(6rem, 12vw, 15rem);
+        --logo-size: clamp(15rem, 25vw, 28rem);
+    }
+    
+    .pages-container {
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
+    
+    .page-card {
+        width: 80vw;
+        height: auto;
+        min-height: 50vh;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --button-size: clamp(5rem, 10vw, 12rem);
+        --logo-size: clamp(12rem, 20vw, 22rem);
+    }
+    
+    .touch-group {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+    
+    .touch-container {
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
 }
