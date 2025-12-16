@@ -1,0 +1,17 @@
+{
+  "name": "le-ra-mat-xa-thang-truong",
+  "version": "1.0.0",
+  "description": "Landing Page Lễ Ra Mắt Trang Thông Tin Điện Tử Xã Thăng Trường",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "gsap": "^3.12.4"
+  }
+}

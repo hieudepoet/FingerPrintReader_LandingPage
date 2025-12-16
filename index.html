@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lễ Ra Mắt Trang Thông Tin Điện Tử - Xã Thăng Trường</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Energy System Canvas -->
+    <canvas id="energySystemCanvas" class="energy-system-canvas"></canvas>
+
+    <!-- Main Screen -->
+    <div id="mainScreen" class="screen active">
+        <!-- Header & Event Combined -->
+        <header class="header">
+            <div class="emblem-container">
+                <img src="assets/emblem.png" alt="Quốc huy" class="emblem-img">
+            </div>
+            <div class="header-content">
+                <h2 class="org-main">ĐẢNG ỦY XÃ THĂNG TRƯỜNG</h1>
+                <div class="org-departments">
+                    <span class="dept-item">BAN XÂY DỰNG ĐẢNG ĐẢNG ỦY</span>
+                    <span class="dept-separator">•</span>
+                    <span class="dept-item">CÔNG AN XÃ</span>
+                    <span class="dept-separator">•</span>
+                    <span class="dept-item">PHÒNG VĂN HÓA - XÃ HỘI</span>
+                </div>
+            </div>
+            <div class="event-section">
+                <h1 class="event-title">LỄ RA MẮT</h2>
+                <h3 class="event-subtitle">TRANG THÔNG TIN ĐIỆN TỬ XÃ THĂNG TRƯỜNG - THÀNH PHỐ ĐÀ NẴNG VÀ FANPAGE "XÃ THĂNG TRƯỜNG - TP. ĐÀ NẴNG"</h3>
+                <p class="event-date">BAN CÔNG TÁC 35 - Thăng Trường, ngày 17 tháng 12 năm 2025</p>
+            </div>
+        </header>
+
+        <!-- Central Logo MOCHA35 -->
+        <div class="central-logo-section">
+            <div class="logo-mocha35" id="logoMocha35">
+                <div class="logo-glow-outer"></div>
+                <div class="logo-glow-inner"></div>
+                <div class="logo-ring logo-ring-1"></div>
+                <div class="logo-ring logo-ring-2"></div>
+                <div class="logo-ring logo-ring-3"></div>
+                <div class="logo-progress-ring" id="logoProgressRing"></div>
+                <div class="logo-content">
+                    <img src="assets/mocha35.png" alt="MOCHA 35" class="mocha35-img" size="30">
+                </div>
+            </div>
+        </div>
+
+        <!-- Touch Buttons with Energy Bar -->
+        <div class="touch-section">
+            <!-- Horizontal Energy Bar -->
+            <div class="energy-bar-container">
+                <div class="energy-bar-horizontal"></div>
+                <div class="energy-bar-vertical"></div>
+            </div>
+
+            <div class="touch-container">
+                <!-- Left Group -->
+                <div class="touch-group touch-group-left">
+                    <button class="touch-btn" data-id="1">
+                        <div class="btn-outer-ring"></div>
+                        <div class="btn-inner-ring"></div>
+                        <div class="btn-glow-zone"></div>
+                        <div class="btn-handprint">
+                            <img src="assets/handprint.png" alt="Handprint" class="handprint-img">
+                        </div>
+                    </button>
+                    <button class="touch-btn" data-id="2">
+                        <div class="btn-outer-ring"></div>
+                        <div class="btn-inner-ring"></div>
+                        <div class="btn-glow-zone"></div>
+                        <div class="btn-handprint">
+                            <img src="assets/handprint.png" alt="Handprint" class="handprint-img">
+                        </div>
+                    </button>
+                    <button class="touch-btn" data-id="3">
+                        <div class="btn-outer-ring"></div>
+                        <div class="btn-inner-ring"></div>
+                        <div class="btn-glow-zone"></div>
+                        <div class="btn-handprint">
+                            <img src="assets/handprint.png" alt="Handprint" class="handprint-img">
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Right Group -->
+                <div class="touch-group touch-group-right">
+                    <button class="touch-btn" data-id="4">
+                        <div class="btn-outer-ring"></div>
+                        <div class="btn-inner-ring"></div>
+                        <div class="btn-glow-zone"></div>
+                        <div class="btn-handprint">
+                            <img src="assets/handprint.png" alt="Handprint" class="handprint-img">
+                        </div>
+                    </button>
+                    <button class="touch-btn" data-id="5">
+                        <div class="btn-outer-ring"></div>
+                        <div class="btn-inner-ring"></div>
+                        <div class="btn-glow-zone"></div>
+                        <div class="btn-handprint">
+                            <img src="assets/handprint.png" alt="Handprint" class="handprint-img">
+                        </div>
+                    </button>
+                    <button class="touch-btn" data-id="6">
+                        <div class="btn-outer-ring"></div>
+                        <div class="btn-inner-ring"></div>
+                        <div class="btn-glow-zone"></div>
+                        <div class="btn-handprint">
+                            <img src="assets/handprint.png" alt="Handprint" class="handprint-img">
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Countdown Screen -->
+    <div id="countdownScreen" class="screen">
+        <canvas id="countdownCanvas" class="countdown-canvas"></canvas>
+        
+        <!-- Central Logo with Countdown Number -->
+        <div class="countdown-logo-section">
+            <div class="countdown-logo-mocha35" id="countdownLogoMocha35">
+                <div class="logo-glow-outer"></div>
+                <div class="logo-glow-inner"></div>
+                <div class="logo-ring logo-ring-1"></div>
+                <div class="logo-ring logo-ring-2"></div>
+                <div class="logo-ring logo-ring-3"></div>
+                <div class="logo-content">
+                    <img src="assets/mocha35.png" alt="MOCHA 35" class="mocha35-img">
+                </div>
+                <div class="countdown-number" id="countdownNumber">5</div>
+            </div>
+        </div>
+
+        <!-- Clone of buttons -->
+        <div class="countdown-touch-section">
+            <div class="touch-container">
+                <div class="touch-group touch-group-left" id="countdownButtonsLeft"></div>
+                <div class="touch-group touch-group-right" id="countdownButtonsRight"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Screen - Two Pages -->
+    <div id="finalScreen" class="screen">
+        <div id="particles-final"></div>
+        
+        <div class="final-content">
+            <div class="pages-container">
+                <!-- Website Card -->
+                <a href="https://thangtruong.danang.gov.vn/" id="websiteLink" class="page-card" target="_blank">
+                    <div class="page-card-glow"></div>
+                    <div class="page-card-title">TRANG THÔNG TIN ĐIỆN TỬ<br>XÃ THĂNG TRƯỜNG - TP. ĐÀ NẴNG</div>
+                    <div class="page-card-image">
+                        <img src="assets/opthangtruong_screen.png" alt="Trang Thông Tin Điện Tử">
+                        <div class="page-card-qr">
+                            <img src="assets/opthangtruong.png" alt="QR Code">
+                        </div>
+                    </div>
+                    <div class="page-card-url">thangtruong.danang.gov.vn</div>
+                </a>
+
+                <!-- Fanpage Card -->
+                <a href="https://www.facebook.com/xathangtruong" id="fanpageLink" class="page-card" target="_blank">
+                    <div class="page-card-glow"></div>
+                    <div class="page-card-title">FANPAGE FACEBOOK<br>XÃ THĂNG TRƯỜNG - TP. ĐÀ NẴNG</div>
+                    <div class="page-card-image">
+                        <img src="assets/fbthangtruong_screen.png" alt="Fanpage Facebook">
+                        <div class="page-card-qr">
+                            <img src="assets/fbthantruong.png" alt="QR Code">
+                        </div>
+                    </div>
+                    <div class="page-card-url">facebook.com/xathangtruong</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="assets/bg-music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="activateSound" preload="auto">
+        <source src="assets/activate.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="countdownTickSound" preload="auto">
+        <source src="assets/countdown-tick.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="explosionSound" preload="auto">
+        <source src="assets/explosion.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
