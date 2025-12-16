@@ -525,6 +525,14 @@ body::after {
     filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.7));
 }
 
+.handprint-img-left {
+    width: 100%;
+    height: 100%;
+    transform: scaleX(-1);
+    object-fit: contain;
+    filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.7));
+}
+
 /* Activated State */
 .touch-btn.activated {
     background: radial-gradient(circle at center, 
