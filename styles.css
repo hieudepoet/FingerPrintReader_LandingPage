@@ -843,7 +843,7 @@ body::after {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30rem;
+    gap: 10rem;
     width: 100%;
 }
 
@@ -863,7 +863,7 @@ body::after {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 5 rem;
+    gap: 5rem;
     cursor: pointer;
     box-shadow: 
         0 2rem 6rem rgba(0, 0, 0, 0.8),
