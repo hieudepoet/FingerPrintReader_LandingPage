@@ -132,6 +132,59 @@ body::after {
     padding: var(--space-sm) var(--space-md);
 }
 
+.header-flags {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.header-flag {
+    position: absolute;
+    width: 12rem;
+    height: auto;
+    filter: drop-shadow(0 0 2rem rgba(255, 215, 0, 0.6));
+    animation: flagWave 3s ease-in-out infinite;
+}
+
+.header-flag-left {
+    left: 5rem;
+    top: -2rem;
+    animation-delay: 0s;
+}
+
+.header-flag-right {
+    right: 5rem;
+    top: -2rem;
+    transform: scaleX(-1);
+    animation-delay: 1.5s;
+}
+
+@keyframes flagWave {
+    0%, 100% {
+        transform: rotate(-3deg) translateY(0);
+    }
+    50% {
+        transform: rotate(3deg) translateY(-0.5rem);
+    }
+}
+
+.header-flag-right {
+    animation-name: flagWaveRight;
+}
+
+@keyframes flagWaveRight {
+    0%, 100% {
+        transform: scaleX(-1) rotate(-3deg) translateY(0);
+    }
+    50% {
+        transform: scaleX(-1) rotate(3deg) translateY(-0.5rem);
+    }
+}
+
 .emblem-container,
 .emblem-img {
     display: none;
@@ -408,7 +461,7 @@ body::after {
 /* ==================== TOUCH SECTION ==================== */
 .touch-section {
     position: fixed;
-    bottom: 30vh;
+    bottom: 10vh;
     left: 0;
     right: 0;
     z-index: 10;
@@ -767,7 +820,7 @@ body::after {
 
 .countdown-touch-section {
     position: fixed;
-    bottom: 30vh;
+    bottom: 10vh;
     left: 0;
     right: 0;
     z-index: 10;
@@ -831,13 +884,13 @@ body::after {
 
 .page-card {
     position: relative;
-    width: 200rem;
+    width: 15 0rem;
     height: auto;
-    min-height: 225rem;
+    min-height: 100rem;
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 0, 0, 0.9) 100%);
-    border: 2.5rem solid rgba(255, 215, 0, 0.7);
+    border: 1rem solid rgba(255, 215, 0, 0.7);
     border-radius: 5rem;
-    padding: 10rem;
+    padding: 5rem;
     text-decoration: none;
     transition: var(--transition-base);
     overflow: visible;
@@ -845,11 +898,11 @@ body::after {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 10rem;
+    gap: 5 rem;
     cursor: pointer;
     box-shadow: 
-        0 5rem 15rem rgba(0, 0, 0, 0.8),
-        0 0 10rem rgba(255, 215, 0, 0.3);
+        0 2rem 6rem rgba(0, 0, 0, 0.8),
+        0 0 4rem rgba(255, 215, 0, 0.3);
     backdrop-filter: blur(10px);
 }
 
@@ -880,13 +933,13 @@ body::after {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: 2.5rem;
+    border-radius: 1rem;
     overflow: hidden;
-    border: 0.5rem solid rgba(255, 215, 0, 0.6);
+    border: 0.2rem solid rgba(255, 215, 0, 0.6);
     background: rgba(0, 0, 0, 0.7);
     box-shadow: 
-        0 2.5rem 7.5rem rgba(0, 0, 0, 0.7),
-        inset 0 0 5rem rgba(0, 0, 0, 0.5);
+        0 1rem 3rem rgba(0, 0, 0, 0.7),
+        inset 0 0 2rem rgba(0, 0, 0, 0.5);
     transition: var(--transition-base);
 }
 
@@ -919,24 +972,24 @@ body::after {
 /* Carousel Navigation Dots */
 .carousel-dots {
     position: absolute;
-    bottom: 5rem;
+    bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 3.75rem;
+    gap: 1.75rem;
     z-index: 10;
     background: rgba(0, 0, 0, 0.6);
-    padding: 2.5rem 5rem;
-    border-radius: 7.5rem;
+    padding: 1rem 2rem;
+    border-radius: 3rem;
     backdrop-filter: blur(5px);
 }
 
 .carousel-dot {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 1.8rem;
+    height: 1.8rem;
     border-radius: 50%;
     background: rgba(255, 215, 0, 0.4);
-    border: 0.5rem solid rgba(255, 215, 0, 0.6);
+    border: 0.2rem solid rgba(255, 215, 0, 0.6);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -955,7 +1008,7 @@ body::after {
 
 .page-card:hover .page-card-image {
     border-color: var(--color-gold);
-    box-shadow: 0 1.5rem 9rem rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0.6rem 3.6rem rgba(255, 215, 0, 0.4);
 }
 
 .page-card-image img {
@@ -973,15 +1026,15 @@ body::after {
 
 .page-card-qr {
     position: absolute;
-    bottom: 5rem;
-    right: 5rem;
-    width: 50rem;
-    height: 50rem;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    width: 30rem;
+    height: 30rem;
     background: rgba(255, 255, 255, 0.95);
-    border: 1.25rem solid rgba(255, 215, 0, 0.8);
-    border-radius: 2.5rem;
-    padding: 2.5rem;
-    box-shadow: 0 1.25rem 6rem rgba(0, 0, 0, 0.7);
+    border: 1rem solid rgba(255, 215, 0, 0.8);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.7);
     z-index: 2;
 }
 
@@ -1007,22 +1060,22 @@ body::after {
 
 .page-card-url {
     font-family: 'Orbitron', monospace;
-    font-size: 7.5rem;
+    font-size: 5rem;
     font-weight: 600;
     color: var(--color-gold);
     text-align: center;
-    padding: 3.75rem 7.5rem;
+    padding: 1.5rem 3rem;
     background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 180, 0, 0.3) 100%);
-    border: 0.75rem solid var(--color-gold);
-    border-radius: 7.5rem;
+    border: 0.5rem solid var(--color-gold);
+    border-radius: 3rem;
     transition: var(--transition-base);
     text-decoration: none;
     box-shadow: 
         0 1.25rem 5rem rgba(0, 0, 0, 0.5),
         0 0 5rem rgba(255, 215, 0, 0.4);
     position: relative;
-    margin-top: 5rem;
-    letter-spacing: 0.375rem;
+    margin-top: 2rem;
+    letter-spacing: 0.15rem;
 }
 
 .page-card:hover .page-card-url {
