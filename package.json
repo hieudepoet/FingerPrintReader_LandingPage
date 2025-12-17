@@ -1,15 +1,62 @@
 {
   "name": "le-ra-mat-xa-thang-truong",
   "version": "1.0.0",
-  "description": "Landing Page Lễ Ra Mắt Trang Thông Tin Điện Tử Xã Thăng Trường",
-  "type": "module",
+  "description": "Lễ Ra Mắt Trang Thông Tin Điện Tử Xã Thăng Trường",
+  "main": "main.js",
+  "author": "Xã Thăng Trường",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron": "electron .",
+    "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win --x64",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
+  },
+  "build": {
+    "appId": "vn.danang.thangtruong.leramat",
+    "productName": "Lễ Ra Mắt Xã Thăng Trường",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "index.html",
+      "main.js",
+      "styles.css",
+      "script.js",
+      "assets/**/*",
+      "!node_modules/**/*",
+      "!src/**/*",
+      "!dist/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "sign": null,
+      "verifyUpdateCodeSignature": false
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.entertainment"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Utility"
+    }
   },
   "devDependencies": {
-    "vite": "^5.0.0"
+    "vite": "^5.0.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.2.0"
   },
   "dependencies": {
     "gsap": "^3.12.4"

@@ -301,44 +301,6 @@ function init() {
     if (websiteLink) websiteLink.href = CONFIG.websiteUrl;
     if (fanpageLink) fanpageLink.href = CONFIG.fanpageUrl;
 
-    // Enable audio immediately and on user interaction
-    function enableAudio() {
-      if (CONFIG.enableSound && bgMusic) {
-        try {
-          bgMusic.volume = 0.3;
-          bgMusic.muted = false; // Unmute
-          const playPromise = bgMusic.play();
-
-          if (playPromise !== undefined) {
-            playPromise
-              .then(() => {
-                console.log("Background music playing successfully");
-              })
-              .catch((err) => {
-                console.log(
-                  "Autoplay blocked, will play on user interaction:",
-                  err
-                );
-                // Unmute and try again on first interaction
-                bgMusic.muted = false;
-              });
-          }
-        } catch (error) {
-          console.error("Error playing background music:", error);
-        }
-      }
-    }
-
-    // Try to play immediately when page loads
-    enableAudio();
-
-    // Also try on first click/touch if autoplay was blocked
-    document.body.addEventListener("click", enableAudio, { once: true });
-    document.body.addEventListener("touchstart", enableAudio, { once: true });
-
-    // Try on any mouse movement as well
-    document.body.addEventListener("mousemove", enableAudio, { once: true });
-
     // Function to update button positions
     function updateButtonPositions() {
       touchButtons.forEach((button) => {
@@ -403,12 +365,26 @@ function handleButtonActivation(e) {
     logoRing3.classList.add(`progress-${activatedButtons.size}`);
   }
 
-  if (CONFIG.enableSound) {
-    activateSound.currentTime = 0;
-    activateSound.volume = 1.0;
-    activateSound
+  // Play activate sound - create new instance each time for overlapping
+  if (CONFIG.enableSound && activateSound) {
+    console.log("🔊 Attempting to play activate sound...");
+    console.log("activateSound.src:", activateSound.src);
+
+    const sound = new Audio(activateSound.src);
+    sound.volume = 1.0;
+    sound.preload = "auto";
+
+    // Load then play
+    sound.load();
+    sound
       .play()
-      .catch((err) => console.log("Activate sound error:", err));
+      .then(() => console.log("✅ Activate sound playing"))
+      .catch((err) => {
+        console.error("❌ Activate sound error:", err);
+        // Fallback: try using original element
+        activateSound.currentTime = 0;
+        activateSound.play().catch((e) => console.error("Fallback failed:", e));
+      });
   }
 
   if (activatedButtons.size === 6) {
@@ -485,7 +461,26 @@ function triggerLogoFlash() {
 // ==================== COUNTDOWN ====================
 function startCountdown() {
   isCountdownActive = true;
-  if (CONFIG.enableSound) bgMusic.pause();
+
+  // Fade out bgMusic over 2 seconds then pause
+  if (CONFIG.enableSound && bgMusic) {
+    const fadeOutDuration = 2000;
+    const fadeSteps = 20;
+    const fadeInterval = fadeOutDuration / fadeSteps;
+    const volumeStep = bgMusic.volume / fadeSteps;
+
+    let currentStep = 0;
+    const fadeOut = setInterval(() => {
+      currentStep++;
+      bgMusic.volume = Math.max(0, bgMusic.volume - volumeStep);
+
+      if (currentStep >= fadeSteps) {
+        clearInterval(fadeOut);
+        bgMusic.pause();
+        console.log("🎵 Background music faded out and paused");
+      }
+    }, fadeInterval);
+  }
 
   // Clone activated buttons to countdown screen
   const leftGroup = document.getElementById("countdownButtonsLeft");
@@ -530,13 +525,13 @@ function runCountdown() {
       if (CONFIG.enableSound && count <= 3) {
         countdownTickSound.currentTime = 0;
         countdownTickSound.volume = 1.0;
-        countdownTickSound.playbackRate = 1.0;
+        countdownTickSound.playbackRate = 1.0; // Speed up to 1.5x to fit 2 second interval
         countdownTickSound
           .play()
           .catch((err) => console.log("Countdown tick error:", err));
       }
 
-      // Animate number after a tiny delay so sound and visual are in sync
+      // Animate number after a delay so sound and visual are in sync
       setTimeout(() => {
         animateCountdownNumber();
       }, 500);
@@ -544,7 +539,7 @@ function runCountdown() {
       clearInterval(countdownInterval);
       triggerExplosion();
     }
-  }, 1500); // Slower countdown: 1.5s per number
+  }, 1500); // 1.5 seconds per number
 }
 
 function animateCountdownNumber() {
@@ -705,10 +700,16 @@ function showFinalScreen() {
   setupCardClickHandlers();
 
   // Restart background music on final screen
-  if (CONFIG.enableSound) {
+  if (CONFIG.enableSound && bgMusic) {
     bgMusic.currentTime = 0;
     bgMusic.volume = 0.3;
-    bgMusic.play().catch(() => {});
+    bgMusic.loop = true;
+    bgMusic
+      .play()
+      .then(() => console.log("✅ Background music restarted on final screen"))
+      .catch((err) =>
+        console.log("⚠️ Could not restart background music:", err)
+      );
   }
 }
 
@@ -761,6 +762,50 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "r" || e.key === "R") resetApp();
 });
 
+// Start background music
+let bgMusicStarted = false;
+
+function startBackgroundMusic() {
+  if (!CONFIG.enableSound || !bgMusic || bgMusicStarted) {
+    return;
+  }
+
+  console.log("🎵 Starting background music...");
+  bgMusic.volume = 0.3;
+  bgMusic.loop = true;
+
+  bgMusic
+    .play()
+    .then(() => {
+      console.log("✅ Background music started successfully!");
+      bgMusicStarted = true;
+    })
+    .catch((err) => {
+      console.error("❌ Background music autoplay blocked:", err.message);
+      console.log("💡 Will play on first user interaction...");
+
+      // Play on first user interaction
+      const playOnInteraction = () => {
+        if (bgMusicStarted) return;
+
+        bgMusic
+          .play()
+          .then(() => {
+            console.log("✅ Background music started after user interaction");
+            bgMusicStarted = true;
+          })
+          .catch((e) => console.error("❌ Still failed:", e));
+      };
+
+      // Listen for any user interaction
+      document.addEventListener("click", playOnInteraction, { once: true });
+      document.addEventListener("touchstart", playOnInteraction, {
+        once: true,
+      });
+      document.addEventListener("keydown", playOnInteraction, { once: true });
+    });
+}
+
 // Wait for GSAP to load
 function waitForGSAP(callback) {
   if (typeof gsap !== "undefined") {
@@ -772,7 +817,11 @@ function waitForGSAP(callback) {
 }
 
 window.addEventListener("load", () => {
-  waitForGSAP(init);
+  waitForGSAP(() => {
+    init();
+    // Start background music after init
+    setTimeout(startBackgroundMusic, 200);
+  });
 });
 
 window.APP = { reset: resetApp, config: CONFIG };

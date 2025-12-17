@@ -788,11 +788,12 @@ body::after {
     left: 0;
     right: 0;
     z-index: 10;
+    display: none; /* Hide buttons on countdown screen */
 }
 
 .countdown-number {
     font-family: 'Orbitron', monospace;
-    font-size: clamp(12rem, 20vw, 24rem);
+    font-size: clamp(18rem, 28vw, 36rem); /* Increased from 12-24rem to 18-36rem */
     font-weight: 900;
     color: var(--color-gold);
     text-shadow: 
