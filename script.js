@@ -301,29 +301,43 @@ function init() {
     if (websiteLink) websiteLink.href = CONFIG.websiteUrl;
     if (fanpageLink) fanpageLink.href = CONFIG.fanpageUrl;
 
-    // Enable audio on first user interaction
+    // Enable audio immediately and on user interaction
     function enableAudio() {
       if (CONFIG.enableSound && bgMusic) {
         try {
           bgMusic.volume = 0.3;
-          bgMusic.play().catch((err) => {
-            console.log(
-              "Background music blocked, waiting for user interaction:",
-              err
-            );
-          });
+          bgMusic.muted = false; // Unmute
+          const playPromise = bgMusic.play();
+
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                console.log("Background music playing successfully");
+              })
+              .catch((err) => {
+                console.log(
+                  "Autoplay blocked, will play on user interaction:",
+                  err
+                );
+                // Unmute and try again on first interaction
+                bgMusic.muted = false;
+              });
+          }
         } catch (error) {
           console.error("Error playing background music:", error);
         }
       }
     }
 
-    // Try to play immediately
+    // Try to play immediately when page loads
     enableAudio();
 
-    // Also try on first click/touch
+    // Also try on first click/touch if autoplay was blocked
     document.body.addEventListener("click", enableAudio, { once: true });
     document.body.addEventListener("touchstart", enableAudio, { once: true });
+
+    // Try on any mouse movement as well
+    document.body.addEventListener("mousemove", enableAudio, { once: true });
 
     // Function to update button positions
     function updateButtonPositions() {

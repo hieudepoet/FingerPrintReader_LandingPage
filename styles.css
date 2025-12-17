@@ -527,14 +527,14 @@ body::after {
     pointer-events: none;
 }
 
-/* Handprint */
+/* Star Icon */
 .btn-handprint {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300%;
-    height: 300%;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
 }
 
@@ -542,13 +542,12 @@ body::after {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.7));
+    filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.7))
 }
 
 .handprint-img-left {
     width: 100%;
     height: 100%;
-    transform: scaleX(-1);
     object-fit: contain;
     filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.7));
 }
@@ -993,8 +992,8 @@ body::after {
     position: absolute;
     bottom: 2.5rem;
     right: 2.5rem;
-    width: 30rem;
-    height: 30rem;
+    width: 50rem;
+    height: 50rem;
     background: rgba(255, 255, 255, 0.95);
     border: 1rem solid rgba(255, 215, 0, 0.8);
     border-radius: 1.5rem;
